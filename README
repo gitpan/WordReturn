@@ -1,0 +1,144 @@
+NAME
+    Text::WordReturn - A Perl module that quickly identifies words and
+    phrases in a document and returns the number of times they appear within
+    that document.
+
+SYNOPSIS
+        use Text::WordReturn;
+    
+        $n= new->WordReturn();
+        $n->getWords("file", "on", "2");
+    
+        # or
+    
+        $n->weightWords("file.txt", "on", "3", "on", "title,h2");
+     
+        # or
+    
+        $n->getPhrases("file", "on", "2", "3");
+    
+        # or if LWP is installed
+    
+        $n->getWords("http://some.url.com", "on", "3");
+    
+INSTALLATION
+    Just follow the usual procedure:
+
+       perl Makefile.PL
+       make
+       make test
+       make install      
+
+PREREQUISITES
+        WordReturn can analyze a document via a URL if LWP is installed.
+
+DESCRIPTION
+        WordReturn provides a quick and easy way to retrieve a list of words or phrases in a document and
+        returns the number of times each word or phrase appears within that document. The ability to weigh words based on their location in the document (or between specified XML/HTML tags).
+        This module can be useful for search and "more like this" type of applications, such as Web based Usenet archives.
+
+METHODS
+  getWords("file", "html", "number of times", "stopwords")
+
+    getWords returns a reference to a hash containing the words in a
+    document and the number of times each word appears within the document.
+
+    getWords takes the following arguments:
+
+    file - Either the name of a file, or a URL (IF LWP is installed).
+
+    html - 'on' or 'off' - off (default if left blank) or on. On strips the
+    HTML from a document, off leaves the HTML there.
+
+    number of times the word needs to appear to be returned. The default is
+    2.
+
+    stopwords - 'on','off' or 'filename' - use built-in, use none, or supply
+    a file (words should be separated by spaces or one word per line)
+    Default is on.
+
+  Example:
+
+    $list=getWords("file.txt", "on", "3", "on");
+
+    $list is a reference to a hash that contains the words in file.txt that
+    appear 3 times or more, any html is stripped, and the built-in stop
+    words are used.
+
+  weightWords("file", "html", "number of times", "stopwords", "tag,tag,tag")
+
+    weightWords returns a reference to a hash containing the words in a
+    document and the weighted value for that word.
+
+    weightWords takes the following arguments:
+
+    file - Either the name of a file, or a URL (IF LWP is installed)
+
+    html - 'on' or 'off' - off (default if left blank) or on. 'on' strips
+    the HTML from a document, 'off' leaves the HTML there.
+
+    number of times the word needs to appear to be returned. The default is
+    2.
+
+    stopwords - 'on','off' or 'filename' - use built-in, use none, or supply
+    a file (words should be separated by spaces or one word per line)
+    Default is on.
+
+    tag - words appearing between these specified tags (tag names should not
+    include <> and should be separated with a comma) will get a higher value
+    (1.2).
+
+    The top 100 words of a document are also given a higher value (1.1).
+
+  Example:
+
+    $list=weightWords("file.txt", "on", "3", "on", "title,h2");
+
+    $list is a reference to a hash that contains the words in file.txt that
+    appear 3 times or more, any html is stripped, and the built-in stop
+    words are used.
+
+  getPhrases("file", "html", "number of times", "number of words", "meta")
+
+    getPhrases returns a reference to a hash containing the phrases in a
+    document and the number of times each phrase appears within the
+    document.
+
+    getPhrases takes the following arguments:
+
+    file - Either the name of a file, or a URL (if LWP is installed).
+
+    html - 'on' or 'off' - off (default if left blank) or on. 'on' strips
+    the HTML from a document, 'off' leaves the HTML there.
+
+    number of times the phrase needs to appear to be returned. The default
+    is 2.
+
+    number of words in a phrase, default is 2.
+
+    stopwords - 'on','off' or 'filename' - use built-in, use none, or supply
+    a file (words should be separated by spaces or one word per line)
+    Default is on.
+
+  Example:
+
+    $list=getPhrases("file.txt", "on", "3", "2", "on");
+
+    $list is a reference to a hash that contains the phrases in file.txt
+    that appear 3 times or more, contain a minimum of 2 words and any html
+    is stripped, and built-in stop words are used.
+
+MORE EXAMPLES
+    Retrieve any word that appears 3 more more times from www.linux.org.
+
+    use Text::WordReturn; $n=WordReturn->new();
+    $list=$n->getWords("http://www.linux.org", "off","3");
+
+    %h=%{$list}; foreach $k(keys %h){ print "$k - $h{$k}\n"; }
+
+COPYRIGHT
+    2001 Mark Griskey <mark@linuxhardware.net>
+
+    This library is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself. =cut
+

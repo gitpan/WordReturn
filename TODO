@@ -1,0 +1,5 @@
+TODO
+
+- Improved HTML stripping. It is currently quick and dirty, serving an immediate purpose.
+- Improved weighting of content between tags.
+
